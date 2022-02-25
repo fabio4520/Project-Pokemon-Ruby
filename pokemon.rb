@@ -1,10 +1,22 @@
-# require neccesary files
+require_relative "pokedex/pokemons.rb"
 
 class Pokemon
   # include neccesary modules
-
+  attr_reader :species, :name
+  
   # (complete parameters)
-  def initialize
+  def initialize(species, name, level = 1)
+    @name = name
+    @level = level
+    @species = species
+    # @type = Pokedex::POKEMONS["Bulbasaur"][:type]
+    @type = Pokedex::POKEMONS[species][:type]
+    @base_exp = 0 # Pokedex::POKEMONS[species][:base_exp]
+    @growth_rate = Pokedex::POKEMONS[species][:growth_rate]
+    @base_stats = { hp: rand(0..31), attack: rand(0..31), defense: rand(0..31), special_attack: rand(0..31), special_defense: rand(0..31), speed: rand(0..31) }
+    @effort_points = Pokedex::POKEMONS[species][:effort_points]
+    @moves = Pokedex::POKEMONS[species][:moves]
+    @experience = 0
     # Retrieve pokemon info from Pokedex and set instance variables
     # Calculate Individual Values and store them in instance variable
     # Create instance variable with effort values. All set to 0
@@ -57,15 +69,8 @@ class Pokemon
   # Create here auxiliary methods
 end
 
-class Charmander < Pokemon
 
-end
-
-class Bulbasaur < Pokemon
-
-end
-
-class Squirtle < Pokemon
-
-end
-
+# a = Pokemon.new("Bulbasaur")
+# p a.species
+# puts ""
+# p a.type
