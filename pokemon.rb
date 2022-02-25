@@ -56,3 +56,16 @@ class Pokemon
   # private methods:
   # Create here auxiliary methods
 end
+
+class Charmander < Pokemon
+
+end
+
+class Bulbasaur < Pokemon
+
+end
+
+class Squirtle < Pokemon
+
+end
+
