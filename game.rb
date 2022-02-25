@@ -32,12 +32,12 @@ class Game
     print "> "
     pokemon = gets.chomp
     puts ""
-    puts "You selected CHARMANDER. Great choice!"
+    puts "You selected #{pokemon.upcase}. Great choice!"
     puts "Give your pokemon a name?"
     print "> "
     pokemon_name = gets.chomp
 
-    puts "#{name}, raise your young #{pokemon_name} by making it fight!"
+    puts "#{name}, raise your young #{pokemon_name.upcase} by making it fight!"
     puts "When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER"
     puts "-----------------------Menu-----------------------"
     puts ""
