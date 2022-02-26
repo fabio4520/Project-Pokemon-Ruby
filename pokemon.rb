@@ -2,21 +2,45 @@ require_relative "pokedex/pokemons.rb"
 
 class Pokemon
   # include neccesary modules
-  attr_reader :species, :name
+  attr_reader :species, :name, :stats, :experience_points, :level, :type
   
   # (complete parameters)
-  def initialize(species, name, level = 1)
-    @name = name
-    @level = level
+
+  def stats_calculation(base_stats, individual_stats, effort_values, level)
+    stats = {}
+    base_stats.each_key do |key|
+      stat_effort = (effort_values[key] / 4.0).floor
+      if key == :hp
+        stat = ((2 * base_stats[key] + individual_stats[key] + stat_effort) * level / 100 + level + 10).floor
+        
+      else
+        stat = ((2 * base_stats[key] + individual_stats[key] + stat_effort) * level / 100 + 5).floor
+      end
+      stats[key] = stat
+    end
+    stats
+  end
+
+  def initialize(species, name = "", level = 1)
+    # TODO VIENE DEL HASH POKEMONS
     @species = species
-    # @type = Pokedex::POKEMONS["Bulbasaur"][:type]
     @type = Pokedex::POKEMONS[species][:type]
-    @base_exp = 0 # Pokedex::POKEMONS[species][:base_exp]
+    @base_exp = Pokedex::POKEMONS[species][:base_exp]
     @growth_rate = Pokedex::POKEMONS[species][:growth_rate]
-    @base_stats = { hp: rand(0..31), attack: rand(0..31), defense: rand(0..31), special_attack: rand(0..31), special_defense: rand(0..31), speed: rand(0..31) }
+    @base_stats = Pokedex::POKEMONS[species][:base_stats]
     @effort_points = Pokedex::POKEMONS[species][:effort_points]
     @moves = Pokedex::POKEMONS[species][:moves]
-    @experience = 0
+
+    #################################
+    # LO QUE ESTAMOS DEFINIENDO
+    @name = name
+    @level = level
+    @experience_points = 0
+    @individual_stats = { hp: rand(0..31), attack: rand(0..31), defense: rand(0..31), special_attack: rand(0..31), special_defense: rand(0..31), speed: rand(0..31) }
+    @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 }
+    @experience_points = 0
+    @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)
+    # @stats[experience_points] = experience_points
     # Retrieve pokemon info from Pokedex and set instance variables
     # Calculate Individual Values and store them in instance variable
     # Create instance variable with effort values. All set to 0
