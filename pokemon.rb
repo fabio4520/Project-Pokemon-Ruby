@@ -39,8 +39,7 @@ class Pokemon
     @individual_stats = { hp: rand(0..31), attack: rand(0..31), defense: rand(0..31), special_attack: rand(0..31), special_defense: rand(0..31), speed: rand(0..31) }
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 }
     @experience_points = 0
-    @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)
-    # @stats[experience_points] = experience_points
+    @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)    
     # Retrieve pokemon info from Pokedex and set instance variables
     # Calculate Individual Values and store them in instance variable
     # Create instance variable with effort values. All set to 0
