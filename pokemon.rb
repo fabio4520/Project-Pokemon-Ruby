@@ -1,8 +1,9 @@
 require_relative "pokedex/pokemons.rb"
+require_relative "player"
 
 class Pokemon
   # include neccesary modules
-  attr_reader :species, :name, :stats, :experience_points, :level, :type
+  attr_reader :species, :name, :stats, :experience_points, :level, :type, :moves
   
   # (complete parameters)
 
@@ -39,7 +40,8 @@ class Pokemon
     @individual_stats = { hp: rand(0..31), attack: rand(0..31), defense: rand(0..31), special_attack: rand(0..31), special_defense: rand(0..31), speed: rand(0..31) }
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 }
     @experience_points = 0
-    @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)    
+    @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)
+    @current_move = nil
     # Retrieve pokemon info from Pokedex and set instance variables
     # Calculate Individual Values and store them in instance variable
     # Create instance variable with effort values. All set to 0
@@ -49,20 +51,44 @@ class Pokemon
     # Calculate pokemon stats and store them in instance variable
   end
 
-  def prepare_for_battle
+  def prepare_for_battle(bot, player)
     # Complete this
+    puts ""
+    puts "#{bot.name} sent out #{bot.pokemon_specie.upcase}!"
+    puts "#{player.name} sent out #{player.pokemon.name.upcase}!"
+    puts "-------------------Battle Start!-------------------\n\n"
+
+    puts "#{player.name}'s #{player.pokemon.name} - Level #{player.pokemon.level}"
+    puts "HP: #{player.pokemon.stats[:hp]}"
+    puts "#{bot.name}'s #{bot.pokemon_specie} - Level #{bot.pokemon.level}"
+    puts "HP: #{bot.pokemon.stats[:hp]}"
+    
+    ##### While fainted?
+    puts "#{player.name}, select your move:"
+    moves = player.pokemon.moves
+    moves.each_with_index {|move, index| print "#{index + 1}. #{move}      "} 
+    # 1. scratch      2. ember
+    # puts ""
+    print "\n> "
+    move_selected = gets.chomp
+    p player.select_move(move_selected) # retorna un hash de MOVES
+    # attack()
+    #######
   end
 
-  def receive_damage
+  def receive_damage(damage)
     # Complete this
+    @stats[:hp] -= damage
   end
 
-  def set_current_move
+  def set_current_move(move)
     # Complete this
+    @current_move = move
   end
 
   def fainted?
     # Complete this
+    !@stats[:hp].positive?
   end
 
   def attack(target)
@@ -79,6 +105,15 @@ class Pokemon
     # ---- "It doesn't affect [target name]!" when effectivenes is 0
     # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
     # Else, print "But it MISSED!"
+    hits? = @current_move[:accuracy] >= rand(1..100)
+    puts "#{@name} used #{@current_move}"
+    if hits?
+      baes_damage = target.receive_damage(@current_move[:power])
+    else
+      puts "But it MISSED!"
+    end
+
+
   end
 
   def increase_stats(target)
@@ -92,8 +127,7 @@ class Pokemon
   # Create here auxiliary methods
 end
 
-
-# a = Pokemon.new("Bulbasaur")
-# p a.species
-# puts ""
-# p a.type
+# player = Player.new("Fabio","Charmander", "Char")
+# bot = Bot.new(1 + rand(1..2))
+# pok = Pokemon.new("Charmander")
+# pok.prepare_for_battle(bot, player)

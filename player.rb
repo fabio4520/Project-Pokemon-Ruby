@@ -1,7 +1,8 @@
 require_relative "pokemon"
+require_relative "pokedex/moves.rb"
 require_relative "pokedex/pokemons.rb"
 class Player
-  attr_reader :pokemon
+  attr_reader :pokemon, :name
   # (Complete parameters)
   def initialize(name, pokemon_specie, pokemon_name = "")
     @name = name
@@ -9,8 +10,9 @@ class Player
     # Complete this
   end
 
-  def select_move
+  def select_move(move) # llamar al hash
     # Complete this
+    return Pokedex::MOVES[move]
   end
 end
 
@@ -18,15 +20,13 @@ end
 class Bot < Player
   # solo se sobreescribe el select_move method
   attr_reader :pokemon_specie, :pokemon, :name
-  def initialize(name, pokemon_specie, pokemon_name = "", level = 1)
+  def initialize(level = 1)
     @name = "Random person"
     @pokemon_options = Pokedex::POKEMONS
     @pokemon_specie = @pokemon_options.keys.sample
-    @pokemon = Pokemon.new(@pokemon_specie, pokemon_name, level = level)
+    @pokemon = Pokemon.new(@pokemon_specie, "", level = level)
   end
 end
 
-# bot = Bot.new("","","")
-# p bot.pokemon_specie
-# p "##########"
-# p bot.pokemon
+# player1 = Player.new("Fabio", "Charmander", "Bulbi")
+# player1.select_move

@@ -43,17 +43,22 @@ class Game
         
     # Then create a Player with that information and store it in @player
     player = Player.new(name,pokemon_specie, pokemon_name)
-    
+
     # Suggested game flow
     def train(name, player)
-      level_pok_player = player.pokemon.level
       # Complete this
-      bot = Bot.new("","", "",level_pok_player + rand(1..2))
+      level_pok_player = player.pokemon.level
+      bot = Bot.new(level_pok_player + rand(1..2))
       puts "#{name} challenge #{bot.name} for training"
-      
       puts "Random Person has a #{bot.pokemon.species} level #{bot.pokemon.level}"
       puts "What do you want to do now?"
       puts "1. Fight        2. Leave"
+      print "> "
+      player_action = gets.chomp
+      return if player_action == "Leave"
+
+      player.pokemon.prepare_for_battle(bot,player)
+      puts ""
     end
   
     def challenge_leader
