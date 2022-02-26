@@ -1,66 +1,49 @@
 # require_relative "player"
 require_relative "pokemon"
-
+require_relative "pokedex/pokemons.rb"
+require_relative "get_inputs_and_prompts"
 class Game
 
-  def start
-    # Create a welcome method(s) to get the name, pokemon and pokemon_name from the user
-    
-    puts "#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#"
-    puts "#$#$#$#$#$#$#$                               $#$#$#$#$#$#$#"
-    puts "#$##$##$##$ ---        Pokemon Ruby         --- #$##$##$#$#"
-    puts "#$#$#$#$#$#$#$                               $#$#$#$#$#$#$#"
-    puts "#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#"
-    puts ""
-    puts  "Hello there! Welcome to the world of POKEMON! My name is OAK!"
-    puts  "People call me the POKEMON PROF!"
-    puts ""
-    puts  "This world is inhabited by creatures called POKEMON! For some"
-    puts  "people, POKEMON are pets. Others use them for fights. Myself..."
-    puts  "I study POKEMON as a profession."
-    name = ""
-    while name.empty?
-      puts "First, what is your name?"
-      print "> "
-      name = gets.chomp
-    end
-
-    puts  "Right! So your name is #{name}"
-    puts  "Your very own POKEMON legend is about to unfold! A world of"
-    puts  "dreams and adventures with POKEMON awaits! Let's go!"
-    puts  "Here, #{name}! There are 3 POKEMON here! Haha!"
-    puts  "When I was young, I was a serious POKEMON trainer."
-    puts  "In my old age, I have only 3 left, but you can have one! Choose!"
-    puts ""
-    validation = true
-    pokemon = ""
-    while validation
-      puts "1. Bulbasaur    2. Charmander   3. Squirtle"
-      print "> "
-      pokemon = gets.chomp
-      validation = false if pokemon == "Bulbasaur" || pokemon == "Charmander" || pokemon == "Squirtle"
-    end
-    puts ""
-    puts "You selected #{pokemon.upcase}. Great choice!"
+  def get_pokemon_name(pokemon_specie)
     puts "Give your pokemon a name?"
     print "> "
     pokemon_name = gets.chomp
+    pokemon_name = pokemon_specie if pokemon_name.empty?
+    pokemon_name
+  end
 
-    pokemon_name = pokemon if pokemon_name.empty? || pokemon_name.nil?    
+  def get_pokemon_specie
+    pokemon_specie = ""
+    options = Pokedex::POKEMONS.keys[0..2]
+    until options.include?(pokemon_specie)
+      options.each_with_index { |element, index| print "#{index + 1}. #{element}    " } 
+      puts ""
+      print "> "
+      pokemon_specie = gets.chomp
+    end
+    pokemon_specie
+  end
 
-    pok = Pokemon.new(pokemon, pokemon_name, 1)
-    # p pok.name
-    # p pok.species
-
-    puts "#{name}, raise your young #{pokemon_name.upcase} by making it fight!"
-    puts "When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER"
-    puts "-----------------------Menu-----------------------"
+  def start
+    # Create a welcome method(s) to get the name, pokemon and pokemon_name from the user
+    puts $welcome_prompt_1
+    name = get_input("First, what is your name?")
+    puts $welcome_prompt_2
+    pokemon_specie = get_pokemon_specie
     puts ""
-    print "> "
+    puts "You selected #{pokemon_specie.upcase}. Great choice!"
+    pokemon_name = get_pokemon_name(pokemon_specie)
+
+    pok = Pokemon.new(pokemon_specie, pokemon_name, 1)
+    
+    puts "#{name.upcase}, raise your young #{pokemon_name.upcase} by making it fight!"
+    puts "When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER"
+    puts "-----------------------Menu-----------------------\n\n"
     puts "1. Stats        2. Train        3. Leader       4. Exit"
     print "> "
+    action = gets.chomp
     puts ""
-
+    
     # Then create a Player with that information and store it in @player
 
 
