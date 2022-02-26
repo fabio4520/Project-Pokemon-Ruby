@@ -40,14 +40,20 @@ class Game
     puts ""
     puts "You selected #{pokemon_specie.upcase}. Great choice!"
     pokemon_name = get_pokemon_name(pokemon_specie)
-    
-    
+        
     # Then create a Player with that information and store it in @player
     player = Player.new(name,pokemon_specie, pokemon_name)
-
+    
     # Suggested game flow
-    def train
+    def train(name, player)
+      level_pok_player = player.pokemon.level
       # Complete this
+      bot = Bot.new("","", "",level_pok_player + rand(1..2))
+      puts "#{name} challenge #{bot.name} for training"
+      
+      puts "Random Person has a #{bot.pokemon.species} level #{bot.pokemon.level}"
+      puts "What do you want to do now?"
+      puts "1. Fight        2. Leave"
     end
   
     def challenge_leader
@@ -89,12 +95,12 @@ class Game
     puts "#{name.upcase}, raise your young #{pokemon_name.upcase} by making it fight!"
     puts "When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER"
     
-    action = print_menu
+    action = menu
 
     until action == "Exit"
       case action
       when "Train"
-        train
+        train(name, player)
       when "Leader"
         challenge_leader
       when "Stats"
