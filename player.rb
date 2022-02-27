@@ -14,12 +14,14 @@ class Player
   def select_move # llamar al hash
     # Complete this
     #Pokedex::MOVES[move]
+    puts ""
     move_selection = ""
     puts "#{pokemon.name}, select your move:"
     moves = pokemon.moves # array
     move_selection = input_validation(move_selection, moves)
-    @pokemon.current_move = Pokedex::MOVES[move_selection]
+    @pokemon.current_move = Pokedex::MOVES[move_selection] # {} del move seleccionado
   end
+
 end
               
 # Create a class Bot that inherits from Player and override the select_move method
@@ -34,7 +36,7 @@ class Bot < Player
   end
 
   def select_move
-    selected_move = pokemon.moves.sample
+    selected_move = pokemon.moves.sample # aleatorio del hash
     @pokemon.current_move = Pokedex::MOVES[selected_move]
   end
 
