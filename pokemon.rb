@@ -4,6 +4,7 @@ require_relative "player"
 class Pokemon
   # include neccesary modules
   attr_reader :species, :name, :stats, :experience_points, :level, :type, :moves
+  attr_accessor :current_move
   
   # (complete parameters)
 
@@ -63,17 +64,8 @@ class Pokemon
     puts "#{bot.name}'s #{bot.pokemon_specie} - Level #{bot.pokemon.level}"
     puts "HP: #{bot.pokemon.stats[:hp]}"
     
-    ##### While fainted?
-    puts "#{player.name}, select your move:"
-    moves = player.pokemon.moves
-    moves.each_with_index {|move, index| print "#{index + 1}. #{move}      "} 
-    # 1. scratch      2. ember
-    # puts ""
-    print "\n> "
-    move_selected = gets.chomp
-    p player.select_move(move_selected) # retorna un hash de MOVES
-    # attack()
-    #######
+    puts player.select_move
+  
   end
 
   def receive_damage(damage)
@@ -81,9 +73,8 @@ class Pokemon
     @stats[:hp] -= damage
   end
 
-  def set_current_move(move)
-    # Complete this
-    @current_move = move
+  def set_current_move
+    @current_move
   end
 
   def fainted?
@@ -105,14 +96,8 @@ class Pokemon
     # ---- "It doesn't affect [target name]!" when effectivenes is 0
     # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
     # Else, print "But it MISSED!"
-    hits? = @current_move[:accuracy] >= rand(1..100)
-    puts "#{@name} used #{@current_move}"
-    if hits?
-      baes_damage = target.receive_damage(@current_move[:power])
-    else
-      puts "But it MISSED!"
-    end
-
+    
+    print "#{player.pokemon.name} used #{player.select_move.upcase}"
 
   end
 
