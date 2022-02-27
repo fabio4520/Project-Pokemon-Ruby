@@ -14,17 +14,7 @@ class Game
     pokemon_name
   end
 
-  def get_pokemon_specie
-    pokemon_specie = ""
-    options = Pokedex::POKEMONS.keys[0..2] # ["Bulbasaur", "Charmander", "Squirtle"]
-    until options.include?(pokemon_specie)
-      options.each_with_index { |element, index| print "#{index + 1}. #{element}    " } 
-      puts ""
-      print "> "
-      pokemon_specie = gets.chomp
-    end
-    pokemon_specie
-  end
+
 
   def start
     # Create a welcome method(s) to get the name, pokemon and pokemon_name from the user
@@ -36,7 +26,10 @@ class Game
     puts "Here, #{name.upcase}! There are 3 POKEMON here! Haha!"
     puts "When I was young, I was a serious POKEMON trainer."
     puts "In my old age, I have only 3 left, but you can have one! Choose!\n\n"
-    pokemon_specie = get_pokemon_specie
+    pokemon_specie = ""
+    options = Pokedex::POKEMONS.keys[0..2] # ["Bulbasaur", "Charmander", "Squirtle"]
+
+    pokemon_specie = input_validation(pokemon_specie, options)
     puts ""
     puts "You selected #{pokemon_specie.upcase}. Great choice!"
     pokemon_name = get_pokemon_name(pokemon_specie)
@@ -52,11 +45,10 @@ class Game
       puts "#{name} challenge #{bot.name} for training"
       puts "Random Person has a #{bot.pokemon.species} level #{bot.pokemon.level}"
       puts "What do you want to do now?"
-      puts "1. Fight        2. Leave"
-      print "> "
-      player_action = gets.chomp
+      options = ["Fight", "Leave"]
+      player_action = ""
+      player_action = input_validation(player_action, options)
       return if player_action == "Leave"
-
       player.pokemon.prepare_for_battle(bot,player)
       puts ""
     end
