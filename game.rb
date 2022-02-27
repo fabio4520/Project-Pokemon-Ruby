@@ -45,6 +45,7 @@ class Game
       puts "#{name} challenge #{bot.name} for training"
       puts "Random Person has a #{bot.pokemon.species} level #{bot.pokemon.level}"
       puts "What do you want to do now?"
+      puts ""
       options = ["Fight", "Leave"]
       player_action = ""
       player_action = input_validation(player_action, options)
