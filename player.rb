@@ -1,6 +1,7 @@
 require_relative "pokemon"
 require_relative "pokedex/moves.rb"
 require_relative "pokedex/pokemons.rb"
+require_relative "get_inputs_and_prompts"
 class Player
   attr_reader :pokemon, :name 
   # (Complete parameters)
@@ -14,18 +15,9 @@ class Player
     # Complete this
     #Pokedex::MOVES[move]
     move_selection = ""
-
-    until pokemon.moves.include? (move_selection)
-      
     puts "#{pokemon.name}, select your move:"
-    moves = pokemon.moves
-    moves.each_with_index {|move, index| print "#{index + 1}. #{move}      "} 
-    # 1. scratch      2. ember
-    # puts ""
-    print "\n> "
-    move_selection = gets.chomp
-    end
-
+    moves = pokemon.moves # array
+    move_selection = input_validation(move_selection, moves)
     @pokemon.current_move = Pokedex::MOVES[move_selection]
   end
 end

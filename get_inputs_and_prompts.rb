@@ -8,6 +8,16 @@ def get_input(prompt)
   input
 end
 
+def input_validation(input, options)
+  until options.include?(input)
+    options.each_with_index { |element, index| print "#{index + 1}. #{element}    " } 
+    puts ""
+    print "> "
+    input = gets.chomp
+  end
+  input
+end
+
 $welcome_prompt_1 ="
 #$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#
 #$#$#$#$#$#$#$                               $#$#$#$#$#$#$#
