@@ -53,11 +53,11 @@ class Game
       player.pokemon.prepare_for_battle(bot,player)
       puts ""
     end
-  
+
     def challenge_leader
       # Complete this
     end
-  
+
     def show_stats(player)
       # Complete this
       pokemon_stats = player.pokemon.stats
@@ -74,13 +74,13 @@ class Game
       end
       puts "Experience Points: #{player.pokemon.experience_points}"  
     end
-  
+
     def goodbye
       # Complete this
       puts "Thanks for playing Pokemon Ruby"
       puts "This game was created with love by: Kevin L., Ariana A., Fabio F., Gustavo Ghost"
     end
-  
+
     def menu
       puts "-----------------------Menu-----------------------\n\n"
       puts "1. Stats        2. Train        3. Leader       4. Exit"
@@ -92,7 +92,7 @@ class Game
 
     puts "#{name.upcase}, raise your young #{pokemon_name.upcase} by making it fight!"
     puts "When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER"
-    
+
     action = menu
 
     until action == "Exit"
