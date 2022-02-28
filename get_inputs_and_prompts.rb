@@ -10,7 +10,7 @@ end
 
 def input_validation(input, options)
   until options.include?(input)
-    options.each_with_index { |element, index| print "#{index + 1}. #{element}    " } 
+    options.each_with_index { |element, index| print "#{index + 1}. #{element}    " }
     puts ""
     print "> "
     input = gets.chomp
@@ -18,7 +18,7 @@ def input_validation(input, options)
   input
 end
 
-$welcome_prompt_1 ="
+$welcome_prompt_1 = "
 #$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#
 #$#$#$#$#$#$#$                               $#$#$#$#$#$#$#
 #$##$##$##$ ---        Pokemon Ruby         --- #$##$##$#$#

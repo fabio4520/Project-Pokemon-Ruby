@@ -1,11 +1,10 @@
 # require_relative "player"
 require_relative "pokemon"
 require_relative "player"
-require_relative "pokedex/pokemons.rb"
+require_relative "pokedex/pokemons"
 require_relative "get_inputs_and_prompts"
 require_relative "battle"
 class Game
-
   def get_pokemon_name(pokemon_specie)
     puts "Give your pokemon a name?"
     print "> "
@@ -13,8 +12,6 @@ class Game
     pokemon_name = pokemon_specie if pokemon_name.empty?
     pokemon_name
   end
-
-
 
   def start
     # Create a welcome method(s) to get the name, pokemon and pokemon_name from the user
@@ -33,9 +30,9 @@ class Game
     puts ""
     puts "You selected #{pokemon_specie.upcase}. Great choice!"
     pokemon_name = get_pokemon_name(pokemon_specie)
-        
+
     # Then create a Player with that information and store it in @player
-    player = Player.new(name,pokemon_specie, pokemon_name)
+    player = Player.new(name, pokemon_specie, pokemon_name)
 
     # Suggested game flow
     def train(name, player)
@@ -51,14 +48,13 @@ class Game
       player_action = input_validation(player_action, options)
       return if player_action == "Leave"
 
-      battle = Battle.new(player, bot) 
-      battle.start      
-
+      battle = Battle.new(player, bot)
+      battle.start
     end
 
     def challenge_leader(name, player)
       # Complete this
-      #level_pok_player = player.pokemon.level
+      # level_pok_player = player.pokemon.level
       leader = Leader.new
       puts "#{name} challenge #{leader.name} for training"
       puts "#{leader.name} has a #{leader.pokemon.species} level #{leader.pokemon.level}"
@@ -69,8 +65,8 @@ class Game
       player_action = input_validation(player_action, options)
       return if player_action == "Leave"
 
-      battle = Battle.new(player, leader) 
-      battle.start      
+      battle = Battle.new(player, leader)
+      battle.start
     end
 
     def show_stats(player)
@@ -80,14 +76,14 @@ class Game
       puts "#{pokemon.name}:"
       puts "Kind: #{pokemon.species}"
       puts "Level: #{pokemon.level}"
-      puts "Type: #{pokemon.type.join(", ")}"
-      puts "Stats:"  
+      puts "Type: #{pokemon.type.join(', ')}"
+      puts "Stats:"
       pokemon_stats.each do |stat, data|
         stat = stat.to_s.split("_")
         puts "#{stat[0].capitalize}: #{data}" if stat.length == 1
         puts "#{stat[0].capitalize} #{stat[1].capitalize}: #{data}" if stat.length == 2
       end
-      puts "Experience Points: #{player.pokemon.experience_points}"  
+      puts "Experience Points: #{player.pokemon.experience_points}"
     end
 
     def goodbye
@@ -124,8 +120,6 @@ class Game
 
     goodbye
   end
-
-  
 end
 
 game = Game.new

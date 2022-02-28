@@ -36,7 +36,7 @@ class Battle
 
     # Check which player won and print messages
     winner = @player_poke.fainted? ? @bot_poke : @player_poke
-    loser = (winner == @player_poke) ? @bot_poke : @player_poke
+    loser = winner == @player_poke ? @bot_poke : @player_poke
     # If the winner is the Player increase pokemon stats
     winner.increase_stats(loser)
   end
@@ -55,21 +55,20 @@ class Battle
       @bot.select_move
 
       first = select_first(@player_poke, @bot_poke)
-      second = (first == @player_poke) ? @bot_poke : @player_poke
+      second = first == @player_poke ? @bot_poke : @player_poke
       # p first
       # p second
       first.attack(@player, @bot)
       puts "-" * 50
-      second.attack(@bot, @player) unless second.fainted? 
-      puts "-" * 50       
+      second.attack(@bot, @player) unless second.fainted?
+      puts "-" * 50
     end
-
   end
 
-  def select_first(player_poke, bot_poke)
+  def select_first(_player_poke, _bot_poke)
     player_move = @player_poke.current_move
     bot_move = @bot_poke.current_move
-  
+
     return @player_poke if player_move[:priority] > bot_move[:priority]
     return @bot_poke if player_move[:priority] < bot_move[:priority]
 
@@ -80,7 +79,5 @@ class Battle
     else
       [@player_poke, @bot_poke].sample
     end
-  
   end
-
 end
