@@ -37,3 +37,17 @@ class Bot < Player
   end
 
 end
+
+class Leader < Player
+  attr_reader :pokemon_specie, :pokemon, :name
+  def initialize
+  @name = "Gym Leader Brock"
+  @pokemon_specie = "Onix"
+  @pokemon = Pokemon.new(@pokemon_specie, @pokemon_specie, level = 10)
+  end
+
+  def select_move
+    selected_move = pokemon.moves.sample # aleatorio del hash
+    @pokemon.current_move = Pokedex::MOVES[selected_move]
+  end
+end
