@@ -28,7 +28,7 @@ class Bot < Player
     @name = "Random person"
     @pokemon_options = Pokedex::POKEMONS
     @pokemon_specie = @pokemon_options.keys.sample
-    @pokemon = Pokemon.new(@pokemon_specie, "", level = level)
+    @pokemon = Pokemon.new(@pokemon_specie, @pokemon_specie, level = level)
   end
 
   def select_move
