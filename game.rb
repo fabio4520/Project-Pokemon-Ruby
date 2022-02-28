@@ -56,8 +56,21 @@ class Game
 
     end
 
-    def challenge_leader
+    def challenge_leader(name, player)
       # Complete this
+      #level_pok_player = player.pokemon.level
+      leader = Leader.new
+      puts "#{name} challenge #{leader.name} for training"
+      puts "#{leader.name} has a #{leader.pokemon.species} level #{leader.pokemon.level}"
+      puts "What do you want to do now?"
+      puts ""
+      options = ["Fight", "Leave"]
+      player_action = ""
+      player_action = input_validation(player_action, options)
+      return if player_action == "Leave"
+
+      battle = Battle.new(player, leader) 
+      battle.start      
     end
 
     def show_stats(player)
@@ -102,7 +115,7 @@ class Game
       when "Train"
         train(name, player)
       when "Leader"
-        challenge_leader
+        challenge_leader(name, player)
       when "Stats"
         show_stats(player)
       end
