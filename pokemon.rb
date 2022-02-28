@@ -6,8 +6,6 @@ class Pokemon
   attr_reader :species, :name, :experience_points, :level, :type, :moves
   attr_accessor :current_move, :stats
 
-  # (complete parameters)
-
   def stats_calculation(base_stats, individual_stats, effort_values, level)
     stats = {}
     base_stats.each_key do |key|
@@ -42,13 +40,6 @@ class Pokemon
     @experience_points = 0
     @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)
     @current_move = nil
-    # Retrieve pokemon info from Pokedex and set instance variables
-    # Calculate Individual Values and store them in instance variable
-    # Create instance variable with effort values. All set to 0
-    # Store the level in instance variable
-    # If level is 1, set experience points to 0 in instance variable.
-    # If level is not 1, calculate the minimum experience point for that level and store it in instance variable.
-    # Calculate pokemon stats and store them in instance variable
   end
 
   def prepare_for_battle(bot, player)
@@ -66,27 +57,19 @@ class Pokemon
     player.select_move
     puts "-" * 50
     attack(player, bot)
+    # increase_stats(bot)
 
   end
 
   def receive_damage(damage, target)
-    # Complete this
     target.pokemon.stats[:hp] -= damage
   end
 
-  # def set_current_move
-  #   @current_move
-  # end
-
   def fainted?
-    # Complete this
     !@stats[:hp].positive?
   end
 
   def calculate_damage(level, current_move, target)
-    # puts "level: #{level}"
-    # puts "current_move: #{current_move}"
-    # puts "target: #{target}"
     if Pokedex::SPECIAL_MOVE_TYPE.include?(current_move[:type]) 
       offensive_stat = @stats[:special_attack]
       target_defensive_stat = target.pokemon.stats[:special_defense]
@@ -95,27 +78,33 @@ class Pokemon
       target_defensive_stat = target.pokemon.stats[:defense]
     end
     move_power = current_move [:power]
-    # puts ""
-    # p "offensive_stat: #{offensive_stat}"
-    # p "level: #{level}"
-    # p "move_power: #{move_power}"
-    # p "target_defensive_stat: #{target_defensive_stat}"
     base_damage = (((2 * level / 5.0 + 2).floor * offensive_stat * move_power / target_defensive_stat).floor / 50.0).floor + 2
     base_damage
   end
 
   def critical(base_damage)
-    ##### CRITICAL
     critical_hit = 16 <= rand(1..16) # true or false    
   end
 
-  def type_effectiveness(base_damage)
+  def type_effectiveness(base_damage, target)
     #### TYPE MULIPLIER
-    multiplier = 0
+    # multiplier: array para almacenar los valores de multiplier, vamos a forzar a que tengan dos elementos
+    # Se fuerza porque no todos los MOVES types tienen un valor para cada tipo de pokemon. Ej. fire vs Normal
+    # En ese caso el multiplicador == 1 para no afectar el calculate_damage
+    multiplier = []
+    # para iterar cada hash del TYPE_MULTIPLIER --> Ej. { user: :normal, target: :rock, multiplier: 0.5 }
     Pokedex::TYPE_MULTIPLIER.each do |hash|
-      multiplier = hash[:multiplier] if hash[:user] == :fire && hash[:target] == :steel
+      # @current_move[:type] --> es el hash que contiene el movimiento de nuestro pokemon. 
+      # target.pokemon.type --> array de symbols que contiene los tipos de pokemon. Ej. para Bulbasaur --> type: %i[grass poison]
+      # hash[:target] --> symbol del hash que estamos iterando para target
+      if hash[:user] == @current_move[:type] && target.pokemon.type.include?(hash[:target])
+        multiplier.append(hash[:multiplier])
+      end
     end
-    multiplier
+    until multiplier.length == 2
+      multiplier.append(1)
+    end
+    multiplier.inject(:*) # multiplico los elementos del array
   end
 
   def attack(player,target)
@@ -127,7 +116,7 @@ class Pokemon
         base_damage *= 1.5
         puts "It was CRITICAL hit!"
       end
-      multiplier = type_effectiveness(base_damage)
+      multiplier = type_effectiveness(base_damage, target)
       damage = (base_damage *= multiplier).floor
       case
       when multiplier <= 0.5 then puts "It's not very effective..."
@@ -140,34 +129,20 @@ class Pokemon
     else
       puts "But it MISSED!" 
     end
-
-    # Print attack message 'Tortuguita used MOVE!'  CHECK
-    # Accuracy check CHECK
-    # If the movement is not missed
-    # -- Calculate base damage  CHECK
-    # -- Critical Hit check
-    # -- If critical, multiply base damage and print message 'It was CRITICAL hit!' # CHECK
-    # -- Effectiveness check # CHECK
-    # -- Mutltiply damage by effectiveness multiplier and round down. Print message if neccesary
-    # ---- "It's not very effective..." when effectivenes is less than or equal to 0.5
-    # ---- "It's super effective!" when effectivenes is greater than or equal to 1.5
-    # ---- "It doesn't affect [target name]!" when effectivenes is 0
-    # -- Inflict damage to target and print message "And it hit [target name] with [damage] damage""
-    # Else, print "But it MISSED!"  CHECK
   end
 
   def increase_stats(target)
-    # Increase stats base on the defeated pokemon and print message "#[pokemon name] gained [amount] experience points"
-
-    # If the new experience point are enough to level up, do it and print
-    # message "#[pokemon name] reached level [level]!" # -- Re-calculate the stat
+    @experience_points += (@base_exp * target.pokemon.level / 7.0).floor
+    puts "#{@name} gained #{@experience_points} experience points"
+    index_plus_one = Pokedex::LEVEL_TABLES[@growth_rate].bsearch_index {|element| element > @experience_points} # devuelve el index inmediato mayor
+    new_level = index_plus_one #index actualizado
+    if new_level > @level
+      @level = new_level 
+      puts "#{@name} reached level #{@level}!"
+    end
   end
 
   # private methods:
   # Create here auxiliary methods
 end
 
-# player = Player.new("Fabio","Charmander", "Char")
-# bot = Bot.new(1 + rand(1..2))
-# pok = Pokemon.new("Charmander")
-# pok.prepare_for_battle(bot, player)
