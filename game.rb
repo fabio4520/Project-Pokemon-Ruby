@@ -3,7 +3,7 @@ require_relative "pokemon"
 require_relative "player"
 require_relative "pokedex/pokemons.rb"
 require_relative "get_inputs_and_prompts"
-
+require_relative "battle"
 class Game
 
   def get_pokemon_name(pokemon_specie)
@@ -50,8 +50,10 @@ class Game
       player_action = ""
       player_action = input_validation(player_action, options)
       return if player_action == "Leave"
-      player.pokemon.prepare_for_battle(bot,player)
-      puts ""
+
+      battle = Battle.new(player, bot) 
+      battle.start      
+
     end
 
     def challenge_leader

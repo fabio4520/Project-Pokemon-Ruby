@@ -37,12 +37,11 @@ class Pokemon
     @experience_points = 0
     @individual_stats = { hp: rand(0..31), attack: rand(0..31), defense: rand(0..31), special_attack: rand(0..31), special_defense: rand(0..31), speed: rand(0..31) }
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 }
-    @experience_points = 0
     @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)
     @current_move = nil
   end
 
-  def prepare_for_battle(bot, player)
+  def prepare_for_battle(player, bot)
     # Complete this
     puts ""
     puts "#{bot.name} sent out #{bot.pokemon_specie.upcase}!"
@@ -54,10 +53,10 @@ class Pokemon
     puts "#{bot.name}'s #{bot.pokemon_specie} - Level #{bot.pokemon.level}"
     puts "HP: #{bot.pokemon.stats[:hp]}"
 
-    player.select_move
-    puts "-" * 50
-    attack(player, bot)
-    # increase_stats(bot)
+    # player.select_move
+    # puts "-" * 50
+    # attack(player, bot)
+    # # increase_stats(bot)
 
   end
 
@@ -107,7 +106,7 @@ class Pokemon
     multiplier.inject(:*) # multiplico los elementos del array
   end
 
-  def attack(player,target)
+  def attack(player, target)
     puts "#{player.pokemon.name} used #{player.pokemon.current_move[:name].upcase}!"
     hit = @current_move[:accuracy] > rand(1..100)
     if hit
@@ -132,7 +131,8 @@ class Pokemon
   end
 
   def increase_stats(target)
-    @experience_points += (@base_exp * target.pokemon.level / 7.0).floor
+    #target = Object type pokemon 
+    @experience_points += (@base_exp * target.level / 7.0).floor
     puts "#{@name} gained #{@experience_points} experience points"
     index_plus_one = Pokedex::LEVEL_TABLES[@growth_rate].bsearch_index {|element| element > @experience_points} # devuelve el index inmediato mayor
     new_level = index_plus_one #index actualizado
@@ -141,7 +141,7 @@ class Pokemon
       puts "#{@name} reached level #{@level}!"
     end
   end
-
+  
   # private methods:
   # Create here auxiliary methods
 end
