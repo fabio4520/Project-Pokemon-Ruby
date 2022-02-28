@@ -27,7 +27,7 @@ class Bot < Player
   def initialize(level = 1)
     @name = "Random person"
     @pokemon_options = Pokedex::POKEMONS
-    @pokemon_specie = @pokemon_options.keys.sample
+    @pokemon_specie = @pokemon_options.keys.sample # string
     @pokemon = Pokemon.new(@pokemon_specie, @pokemon_specie, level = level)
   end
 

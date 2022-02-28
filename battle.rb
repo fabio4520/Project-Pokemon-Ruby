@@ -3,6 +3,7 @@ require_relative "pokemon"
 
 class Battle
   # (complete parameters)
+
   def initialize(player, bot)
     @player = player
     @bot = bot
@@ -14,7 +15,13 @@ class Battle
 
   def start
     # Prepare the Battle (print messages and prepare pokemons)
-    @player_poke.prepare_for_battle(@player, @bot)
+    @player_poke.prepare_for_battle
+    @bot_poke.prepare_for_battle
+
+    puts ""
+    puts "#{@bot.name} sent out #{@bot_poke.species.upcase}!"
+    puts "#{@player.name} sent out #{@player_poke.name.upcase}!"
+
     # Until one pokemon faints
     battle_loop
     # --Print Battle Status
@@ -35,13 +42,22 @@ class Battle
   end
 
   def battle_loop
+    puts "-------------------Battle Start!-------------------\n\n"
+
     until @player_poke.fainted? || @bot_poke.fainted?
+
+      puts "#{@player.name}'s #{@player_poke.name} - Level #{@player_poke.level}"
+      puts "HP: #{@player_poke.current_hp}"
+      puts "#{@bot.name}'s #{@bot_poke.species} - Level #{@bot_poke.level}"
+      puts "HP: #{@bot_poke.current_hp}"
+
       @player.select_move
       @bot.select_move
 
       first = select_first(@player_poke, @bot_poke)
       second = (first == @player_poke) ? @bot_poke : @player_poke
-
+      # p first
+      # p second
       first.attack(@player, @bot)
       puts "-" * 50
       second.attack(@bot, @player) unless second.fainted? 

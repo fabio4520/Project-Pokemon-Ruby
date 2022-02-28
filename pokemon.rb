@@ -3,8 +3,8 @@ require_relative "player"
 
 class Pokemon
   # include neccesary modules
-  attr_reader :species, :name, :experience_points, :level, :type, :moves
-  attr_accessor :current_move, :stats
+  attr_reader :species, :name, :experience_points, :level, :type, :moves, :effort_points
+  attr_accessor :current_move, :stats, :current_hp
 
   def stats_calculation(base_stats, individual_stats, effort_values, level)
     stats = {}
@@ -39,33 +39,22 @@ class Pokemon
     @effort_values = { hp: 0, attack: 0, defense: 0, special_attack: 0, special_defense: 0, speed: 0 }
     @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)
     @current_move = nil
+    @current_hp = nil
   end
 
-  def prepare_for_battle(player, bot)
+  def prepare_for_battle
     # Complete this
-    puts ""
-    puts "#{bot.name} sent out #{bot.pokemon_specie.upcase}!"
-    puts "#{player.name} sent out #{player.pokemon.name.upcase}!"
-    puts "-------------------Battle Start!-------------------\n\n"
-
-    puts "#{player.name}'s #{player.pokemon.name} - Level #{player.pokemon.level}"
-    puts "HP: #{player.pokemon.stats[:hp]}"
-    puts "#{bot.name}'s #{bot.pokemon_specie} - Level #{bot.pokemon.level}"
-    puts "HP: #{bot.pokemon.stats[:hp]}"
-
-    # player.select_move
-    # puts "-" * 50
-    # attack(player, bot)
-    # # increase_stats(bot)
+    @current_hp = @stats[:hp]
+    @current_move = nil
 
   end
 
   def receive_damage(damage, target)
-    target.pokemon.stats[:hp] -= damage
+    @current_hp -= damage
   end
 
   def fainted?
-    !@stats[:hp].positive?
+    !@current_hp.positive?
   end
 
   def calculate_damage(level, current_move, target)
@@ -140,8 +129,12 @@ class Pokemon
       @level = new_level 
       puts "#{@name} reached level #{@level}!"
     end
+    type_target = target.effort_points[:type]
+    amount_target = target.effort_points[:amount]
+    @effort_values[type_target] += amount_target
+    @stats = stats_calculation(@base_stats, @individual_stats, @effort_values, @level)
   end
-  
+
   # private methods:
   # Create here auxiliary methods
 end
